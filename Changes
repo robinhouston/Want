@@ -1,0 +1,96 @@
+Revision history for Perl extension Want.
+
+0.01  Sun Jul  1 18:04:58 2001
+	- original version; created by h2xs 1.1.1.4 with options
+		-A Want
+	- Published to CPAN on 2001-07-15
+
+0.02  Mon Jul 16 10:06:15 2001
+	- Give correct expectation count for constructs like
+		my ($x, $y, $z) = (23, foo());   # foo's expectation count is 2
+	- want(2) should be true in C<@x = foo()> etc;
+	  i.e. infinity > N for any finite N  :-)
+	- Support '!' negative requests
+	- correct expectation count for slices
+
+0.03  Wed Jul 25 12:03:01 BST 2001
+	- Fix documentation snafus
+	- add want('COUNT') as a synonym for C<howmany>
+	  and want('REF') for C<wantref>
+	- BOOLEAN context
+	- now compiles & passes tests under ithreads
+	- SCALARREF and OBJECT reference contexts
+	  (want('REF') eq 'SCALAR' || want('REF') eq 'OBJECT')
+	- Reorganised test suite
+
+0.04  Sat Aug  4 09:44:34 BST 2001
+	- 'want' is now exported by default
+	- BOOL is a euphemism for BOOLEAN (Perl 6 compatibility)
+	- ARGUMENTS section added to documentation
+	- excised C++-style comments from the source
+	- fixed the expectation count issue from the BUGS section of 0.03
+	- ASSIGN context. Yeah, baby!
+	- don't throw an error if RVALUE/LVALUE are used from a non-lvalue sub
+	- specifiers can also now be space-separated, e.g.:
+		want('LVALUE ASSIGN');
+
+0.05  Tue Aug 28 22:14:48 BST 2001
+	- tests pass on 5.6.1 and above
+	- added 'rreturn' and 'lnoreturn' functions
+
+0.06  Fri Jul 25 11:42:13 BST 2003
+	- pass thread context to Perl_pop_return
+	- remove v-string
+
+0.07  Mon Aug 18 10:27:27 BST 2003
+	- do not try to call pop_return (it's private)
+	- update copyright year(s) and fix doc glitches
+	- remove spurious || $n eq 'gelem' from _wantref
+        - change i to I32 (rather than U32) to avoid compiler warning
+          on Win32
+
+0.08  Mon Dec 13 01:23:28 GMT 2004
+	- Accommodate the changed internals of perl 5.9.2
+          (the retstack is no more: see change #23156).
+
+0.09  Thu Jun 30 15:02:37 BST 2005
+    - Fix a bug reported by Damian: want doesn't work (crashes) if
+      it's called from within the guard of a loop. See the comment
+      above upcontext_plus in Want.xs.
+    - Runs under the debugger!
+    - Give an error message (rather than segfaulting) if called from
+      a tie handler.
+
+0.10  Sat Mar 25 15:00:41 GMT 2006
+    - Make context propagate through subroutine return
+    - Fix bug whereby want('LVALUE') sometimes gave false positives
+      (see test 58 in t/all.t)
+    - Fix bug whereby want_boolean often gave false positives
+
+0.11  Sat Aug 26 22:36:27 BST 2006
+    - (Jerry D. Hedden) Fix bug whereby 'lnoreturn' failed to
+      decrement the CvDEPTH, which causes an error with 'use threads'
+
+0.12  Tue Aug 29 21:06:40 BST 2006
+    - (Jerry D. Hedden) Force the threads test to be skipped if oldstyle
+      threads (as opposed to ithreads) are in use.
+
+0.13  Tue May  1 21:39:19 BST 2007
+    - Address bug #26847, and add t/methcall.t
+
+0.14  Fri May  4 12:00:20 BST 2007
+    - Fix bug #26928
+
+0.15  Sun Jul 15 14:39:15 BST 2007
+    - Fix compiler warning (#26961) -- from Jerry D. Hedden
+    - Fix memory leak in want_assign (#28224)
+
+0.16  Thu Dec  6 11:15:39 GMT 2007
+    - Make sure there are no ._ files in the tarball
+    - Refuse to run Makefile.PL with Perl < 5.006
+
+0.17  Sun Feb  3 22:30:30 GMT 2008
+    - Be compatible with internals changes post-5.10 (new loop contexts & CxLVAL)
+
+0.18  Mon Feb  4 09:35:56 GMT 2008
+    - Code identical to 0.17; eliminate ._files by using gnutar.
