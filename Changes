@@ -94,3 +94,11 @@ Revision history for Perl extension Want.
 
 0.18  Mon Feb  4 09:35:56 GMT 2008
     - Code identical to 0.17; eliminate ._files by using gnutar.
+
+0.19  Sat 30 Jul 2011 17:07:16 BST
+    - Change tests to avoid the new warning 'Useless assignment to a temporary' added in 5.15.
+
+0.20  Sun  5 Feb 2012 17:43:22 GMT
+    - Remove a test that was testing the behaviour of perl, rather than of this module,
+      and was testing an aspect of perl’s behaviour that has changed (bf8fb5ebd) in
+      in such a way that the test was failing with bleadperl.

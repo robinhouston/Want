@@ -13,8 +13,9 @@ sub t {
     print (want(@_) ? "ok $t\n" : "not ok $t\n");
 }
 
+my $t;
 sub tl :lvalue {
-    my $t = shift();
+    $t = shift();
     print (want(@_) ? "ok $t\n" : "not ok $t\n");
     $t;
 }

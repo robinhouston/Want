@@ -12,7 +12,7 @@ our @ISA = qw(Exporter DynaLoader);
 
 our @EXPORT = qw(want rreturn lnoreturn);
 our @EXPORT_OK = qw(howmany wantref);
-our $VERSION = '0.18';
+our $VERSION = '0.20';
 
 bootstrap Want $VERSION;
 
@@ -172,12 +172,14 @@ sub rreturn (@) {
     return wantarray ? @_ : $_[$#_];
 }
 
+my $dummy_lvalue;
+my $another_reference_to_dummy_lvalue = \$dummy_lvalue; # Avoid "useless assignment to a temporary" warning
 sub lnoreturn () {
     if (!want_lvalue(1) || !want_assign(1)) {
         croak "Can't lnoreturn except in ASSIGN context";
     }
     double_return();
-    return undef;
+    return $dummy_lvalue;
 }
 
 # Some naughty people were relying on these internal methods.

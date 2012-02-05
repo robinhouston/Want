@@ -8,9 +8,10 @@ print "ok 1\n";
 
 # Now test the private low-level mechanisms
 
+my $xxx;
 sub lv :lvalue {
     print (Want::want_lvalue(0) ? "ok 2\n" : "not ok 2\n");
-    my $xxx;
+    $xxx;
 }
 
 &lv = 23;
@@ -141,7 +142,13 @@ print ($y == 23 ? "ok 35\n" : "not ok 35\n");
 @x = \(g(37, 'LVALUE', 'LIST'));
 ($x) = \(scalar g(38, 'RVALUE'));
 $$x = 29;
-print ($y != 29 ? "ok 39\n" : "not ok 39\n");
+
+# There used to be a test here which tested that $y != 29. However this
+# is really testing the behaviour of perl itself rather than of the Want
+# module, and the behaviour of perl has changed since 5.14: see
+# commit bf8fb5ebd. So we don’t have to renumber all following tests,
+# we just insert a dummy test 39 that always passes.
+print "ok 39 # Not a real test\n";
 
 ng(41, 'REF') = g(40, 'HASH')->{foo};
 $y = sub {}; # Just to silence warning
