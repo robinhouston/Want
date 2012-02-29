@@ -690,7 +690,8 @@ context. Let me know if this is a problem.
 
 Robin Houston, E<lt>robin@cpan.orgE<gt>
 
-Thanks to Damian Conway for encouragement and good suggestions.
+Thanks to Damian Conway for encouragement and good suggestions,
+and Father Chrysostomos for a patch.
 
 =head1 SEE ALSO
 
@@ -709,7 +710,7 @@ http://dev.perl.org/rfc/21.html
 
 =head1 COPYRIGHT
 
-Copyright (c) 2001-2006, Robin Houston. All Rights Reserved.
+Copyright (c) 2001-2012, Robin Houston. All Rights Reserved.
 This module is free software. It may be used, redistributed
 and/or modified under the same terms as Perl itself.
 

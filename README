@@ -68,14 +68,16 @@ EXAMPLES
     print ((pi)[3]);    # prints 1
 
 
+    use Want;
+    use strict;
     sub backstr :lvalue {
         if (want(qw'LVALUE ASSIGN')) {
             my ($a) = want('ASSIGN');
             $_[0] = reverse $a;
-            return undef;
+            lnoreturn;
         }
         elsif (want('RVALUE')) {
-            my $t = scalar reverse $_[0];
+            rreturn scalar reverse $_[0];
         }
         else {
             carp("Not in ASSIGN context");
