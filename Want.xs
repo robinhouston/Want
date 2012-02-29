@@ -676,3 +676,11 @@ double_return()
 #endif
 
     return;
+
+SV *
+disarm_temp(sv)
+SV *sv;
+  CODE:
+    RETVAL = sv_2mortal(SvREFCNT_inc(SvREFCNT_inc(sv)));
+  OUTPUT:
+    RETVAL
