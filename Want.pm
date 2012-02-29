@@ -497,7 +497,8 @@ A full list of the permitted keyword is in the B<ARGUMENTS> section below.
 Use this function instead of C<return> from inside an lvalue subroutine when
 you know that you're in RVALUE context. If you try to use a normal C<return>,
 you'll get a compile-time error in Perl 5.6.1 and above unless you return an
-lvalue.
+lvalue. (Note: this is no longer true in Perl 5.16, where an ordinary return
+will once again work.)
 
 =item lnoreturn
 
@@ -508,7 +509,7 @@ appropriate action.
 If you use C<rreturn> or C<lnoreturn>, then you have to put a bare C<return;>
 at the very end of your lvalue subroutine, in order to stop the Perl compiler
 from complaining. Think of it as akin to the C<1;> that you have to put at the
-end of a module.
+end of a module. (Note: this is no longer true in Perl 5.16.)
 
 =item howmany()
 
