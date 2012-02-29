@@ -102,3 +102,7 @@ Revision history for Perl extension Want.
     - Remove a test that was testing the behaviour of perl, rather than of this module,
       and was testing an aspect of perl’s behaviour that has changed (bf8fb5ebd) in
       in such a way that the test was failing with bleadperl.
+
+0.21  Wed 29 Feb 2012 16:47:58 GMT
+    - Avoid leaking the RHS of an lnoreturn lvalue sub, thanks to Father Chrysostomos
+      https://rt.cpan.org/Public/Bug/Display.html?id=72083
