@@ -169,7 +169,14 @@ sub rreturn (@) {
         croak "Can't rreturn in lvalue context";
     }
     double_return();
-    return wantarray ? @_ : $_[$#_];
+
+    # Extra scope needed to work with perl-5.19.7 or greater.
+    # Prevents the return being optimised out, which is needed
+    # since it's actually going to be used a stack level above
+    # this sub.
+    {
+        return wantarray ? @_ : $_[$#_];
+    }
 }
 
 sub lnoreturn () {
@@ -177,7 +184,14 @@ sub lnoreturn () {
         croak "Can't lnoreturn except in ASSIGN context";
     }
     double_return();
-    return disarm_temp(my $undef);
+
+    # Extra scope needed to work with perl-5.19.7 or greater.
+    # Prevents the return being optimised out, which is needed
+    # since it's actually going to be used a stack level above
+    # this sub.
+    {
+        return disarm_temp(my $undef);
+    }
 }
 
 # Some naughty people were relying on these internal methods.
