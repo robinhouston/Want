@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
-| Want v0.21    - Robin Houston, 2012-02-29
+| Want v0.22    - Robin Houston, 2013-12-15
 -----------------------------------------------------------------------------
 
 For full documentation, see the POD included with the module.
@@ -94,7 +94,8 @@ AUTHOR
        Robin Houston, <robin@cpan.org>
        
        Thanks to Damian Conway for encouragement and good
-       suggestions, and Father Chrysostomos for a patch.
+       suggestions, and to Father Chrysostomos and Andrew
+       Horsfall for patches.
 
 SEE ALSO
        o   the wantarray entry in the perlfunc manpage
