@@ -107,7 +107,11 @@ Revision history for Perl extension Want.
     - Avoid leaking the RHS of an lnoreturn lvalue sub, thanks to Father Chrysostomos
       https://rt.cpan.org/Public/Bug/Display.html?id=72083
 
-0.22 Sun 15 Dec 2013 17:08:35 GMT
+0.22  Sun 15 Dec 2013 17:08:35 GMT
     - Prevent return from being optimised away by newer (>= 5.19.7) Perls.
       This is a patch supplied by @wolfsage: see
       https://github.com/robinhouston/Want/pull/1
+
+0.23  Mon 24 Mar 2014 00:28:36 GMT
+    - Accommodate a bleadperl change to the optree, made in 7d3c8a6837b55fff0e6294ebf8c94a1601367c76.
+      This is bug #94086 for Want, and bug #121342 for perl5.

@@ -359,7 +359,7 @@ I32 count_slice (OP* o) {
     if (pm->op_type != OP_PUSHMARK)
         die("%s", "Want panicked: slice doesn't start with pushmark\n");
         
-    if ( (l = pm->op_sibling) && (l->op_type == OP_LIST))
+    if ( (l = pm->op_sibling) && (l->op_type == OP_LIST || (l->op_type == OP_NULL && l->op_targ == OP_LIST)))
         return count_list(l, Nullop);
 
     else if (l)
