@@ -115,3 +115,7 @@ Revision history for Perl extension Want.
 0.23  Mon 24 Mar 2014 00:28:36 GMT
     - Accommodate a bleadperl change to the optree, made in 7d3c8a6837b55fff0e6294ebf8c94a1601367c76.
       This is bug #94086 for Want, and bug #121342 for perl5.
+
+0.24  Tue  2 Dec 2014 10:22:39 GMT
+    - Accommodate another bleadperl change. Patch provided by Father Chrysostomos at
+      https://rt.cpan.org/Public/Bug/Display.html?id=100626

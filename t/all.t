@@ -140,7 +140,7 @@ print ($y == 23 ? "ok 35\n" : "not ok 35\n");
 
 @x = g(36, 'RVALUE', 'LIST');
 @x = \(g(37, 'LVALUE', 'LIST'));
-($x) = \(scalar g(38, 'RVALUE'));
+($x) = \(scalar g(38, $] >= 5.021007 ? ('LVALUE', 'SCALAR') : 'RVALUE'));
 $$x = 29;
 
 # There used to be a test here which tested that $y != 29. However this
