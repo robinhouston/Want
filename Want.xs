@@ -543,6 +543,57 @@ I32 uplevel;
 	PUSHs(sv_2mortal(newSVpv(retval, 0)));
     }
 
+#ifdef OPpMULTIDEREF_EXISTS
+char*
+first_multideref_type(uplevel)
+I32 uplevel;
+  PREINIT:
+    OP *r;
+    OP *o = parent_op(uplevel, &r);
+    UNOP_AUX_item *items;
+    UV actions;
+    bool repeat;
+    char *retval;
+  PPCODE:
+    if (o->op_type != OP_MULTIDEREF) Perl_croak(aTHX_ "Not a multideref op!");
+    items = cUNOP_AUXx(o)->op_aux;
+    actions = items->uv;
+
+    do {
+	repeat = FALSE;
+	switch (actions & MDEREF_ACTION_MASK) {
+	    case MDEREF_reload:
+		actions = (++items)->uv;
+		repeat = TRUE;
+		continue;
+
+	    case MDEREF_AV_pop_rv2av_aelem:
+	    case MDEREF_AV_gvsv_vivify_rv2av_aelem:
+	    case MDEREF_AV_padsv_vivify_rv2av_aelem:
+	    case MDEREF_AV_vivify_rv2av_aelem:
+	    case MDEREF_AV_padav_aelem:
+	    case MDEREF_AV_gvav_aelem:
+		retval = "ARRAY";
+		break;
+
+	    case MDEREF_HV_pop_rv2hv_helem:
+	    case MDEREF_HV_gvsv_vivify_rv2hv_helem:
+	    case MDEREF_HV_padsv_vivify_rv2hv_helem:
+	    case MDEREF_HV_vivify_rv2hv_helem:
+	    case MDEREF_HV_padhv_helem:
+	    case MDEREF_HV_gvhv_helem:
+		retval = "HASH";
+		break;
+
+	    default:
+		Perl_croak(aTHX_ "Unrecognised OP_MULTIDEREF action (%lu)!", actions & MDEREF_ACTION_MASK);
+	}
+    } while (repeat);
+
+    EXTEND(SP, 1);
+    PUSHs(sv_2mortal(newSVpv(retval, 0)));
+
+#endif
 
 I32
 want_count(uplevel)

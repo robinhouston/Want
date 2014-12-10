@@ -119,3 +119,8 @@ Revision history for Perl extension Want.
 0.24  Tue  2 Dec 2014 10:22:39 GMT
     - Accommodate another bleadperl change. Patch provided by Father Chrysostomos at
       https://rt.cpan.org/Public/Bug/Display.html?id=100626
+
+0.25  Wed 10 Dec 2014 19:31:03 GMT
+    - Add support for the new OP_MULTIDEREF
+      Perl has a new op, added as a performance optimisation in fedf30e1c349130b23648c022f5f3cb4ad7928f3,
+      to represent a sequence of array/hash dereferences. This patch adds support for the new op.

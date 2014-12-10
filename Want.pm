@@ -12,7 +12,7 @@ our @ISA = qw(Exporter DynaLoader);
 
 our @EXPORT = qw(want rreturn lnoreturn);
 our @EXPORT_OK = qw(howmany wantref);
-our $VERSION = '0.24';
+our $VERSION = '0.25';
 
 bootstrap Want $VERSION;
 
@@ -128,7 +128,8 @@ sub howmany () {
 }
 
 sub wantref {
-    my $n = parent_op_name(bump_level(@_, 1));
+    my $level = bump_level(@_, 1);
+    my $n = parent_op_name($level);
     if    ($n eq 'rv2av') {
 	return "ARRAY";
     }
@@ -146,6 +147,9 @@ sub wantref {
     }
     elsif ($n eq 'method_call') {
 	return 'OBJECT';
+    }
+    elsif ($n eq 'multideref') {
+	return first_multideref_type($level);
     }
     else {
 	return "";
