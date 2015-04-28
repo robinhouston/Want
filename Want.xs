@@ -19,6 +19,10 @@
 #  define CxLVAL(cx) cx->blk_sub.lval
 #endif
 
+#ifndef OpSIBLING
+#  define OpSIBLING(o) o->op_sibling
+#endif
+
 /* Stolen from B.xs */
 
 #ifdef PERL_OBJECT
@@ -282,7 +286,7 @@ find_ancestors_from(OP* start, OP* next, oplist* l)
     else ll = l->length;
    
     /* printf("Looking for 0x%x starting at 0x%x\n", next, start); */
-    for (o = start; o; p = o, o = o->op_sibling, ++cn) {
+    for (o = start; o; p = o, o = OpSIBLING(o), ++cn) {
         /* printf("(0x%x) %s -> 0x%x\n", o, PL_op_name[o->op_type], o->op_next);*/
 
         if (o->op_type == OP_ENTERSUB && o->op_next == next)
@@ -359,7 +363,7 @@ I32 count_slice (OP* o) {
     if (pm->op_type != OP_PUSHMARK)
         die("%s", "Want panicked: slice doesn't start with pushmark\n");
         
-    if ( (l = pm->op_sibling) && (l->op_type == OP_LIST || (l->op_type == OP_NULL && l->op_targ == OP_LIST)))
+    if ( (l = OpSIBLING(pm)) && (l->op_type == OP_LIST || (l->op_type == OP_NULL && l->op_targ == OP_LIST)))
         return count_list(l, Nullop);
 
     else if (l)
@@ -398,7 +402,7 @@ count_list (OP* parent, OP* returnop)
         return 0;
         
     /*printf("count_list: returnop = 0x%x\n", returnop);*/
-    for(o = cUNOPx(parent)->op_first; o; o=o->op_sibling) {
+    for(o = cUNOPx(parent)->op_first; o; o=OpSIBLING(o)) {
         /* printf("\t%-8s\t(0x%x)\n", PL_op_name[o->op_type], o->op_next);*/
         if (returnop && o->op_type == OP_ENTERSUB && o->op_next == returnop)
             return i;
@@ -528,7 +532,7 @@ I32 uplevel;
   PPCODE:
     /* This is a bit of a cheat, admittedly... */
     if (o && o->op_type == OP_ENTERSUB && (first = cUNOPo->op_first)
-          && (second = first->op_sibling) && second->op_sibling != Nullop)
+          && (second = OpSIBLING(first)) && OpSIBLING(second) != Nullop)
       retval = "method_call";
     else {
       retval = o ? (char *)PL_op_name[o->op_type] : "(none)";

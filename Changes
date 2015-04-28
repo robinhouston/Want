@@ -124,3 +124,21 @@ Revision history for Perl extension Want.
     - Add support for the new OP_MULTIDEREF
       Perl has a new op, added as a performance optimisation in fedf30e1c349130b23648c022f5f3cb4ad7928f3,
       to represent a sequence of array/hash dereferences. This patch adds support for the new op.
+
+0.26  Tue 28 Apr 2015 12:31:17 BST
+    - There is a new experimental option in bleadperl under which one ought not to use
+      the op_sibling field directly. Quoting from perlguts.pod:
+      
+      “ Starting in version 5.21.2, perls built with the experimental
+        define C<-DPERL_OP_PARENT> add an extra boolean flag for each op,
+        C<op_moresib>.  When not set, this indicates that this is the last op in an
+        C<OpSIBLING> chain. This frees up the C<op_sibling> field on the last
+        sibling to point back to the parent op. Under this build, that field is
+        also renamed C<op_sibparent> to reflect its joint role. The macro
+        C<OpSIBLING(o)> wraps this special behaviour, and always returns NULL on
+        the last sibling.  With this build the C<op_parent(o)> function can be
+        used to find the parent of any op. Thus for forward compatibility, you
+        should always use the C<OpSIBLING(o)> macro rather than accessing
+        C<op_sibling> directly. ”
+     
+      Thanks to Reini Urban for the patch.
