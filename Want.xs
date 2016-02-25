@@ -172,8 +172,17 @@ upcontext_plus(pTHX_ I32 count, bool end_of_block)
             continue;
 #ifdef CXt_LOOP_PLAIN
         case CXt_LOOP_PLAIN:
+#endif
+#ifdef CXt_LOOP_FOR
         case CXt_LOOP_FOR:
-#else
+#endif
+#ifdef CXt_LOOP_LIST
+        case CXt_LOOP_LIST:
+#endif
+#ifdef CXt_LOOP_ARY
+        case CXt_LOOP_ARY:
+#endif
+#ifdef CXt_LOOP
         case CXt_LOOP:
 #endif
             return tcx;
@@ -715,6 +724,7 @@ U32 uplevel;
 
 void
 double_return(...)
+  ATTRS: lvalue
   PREINIT:
     PERL_CONTEXT *ourcx, *cx;
   PPCODE:

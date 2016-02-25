@@ -12,7 +12,7 @@ our @ISA = qw(Exporter DynaLoader);
 
 our @EXPORT = qw(want rreturn lnoreturn);
 our @EXPORT_OK = qw(howmany wantref);
-our $VERSION = '0.27';
+our $VERSION = '0.28';
 
 bootstrap Want $VERSION;
 
@@ -191,9 +191,15 @@ sub lnoreturn () : lvalue {
     # Prevents the return being optimised out, which is needed
     # since it's actually going to be used a stack level above
     # this sub.
-    {
+    #
+    # But in older versions of perl, adding the extra scope
+    # causes the error:
+    #   Can't modify loop exit in lvalue subroutine return
+    # so we have to check the version.
+    if ($] >= 5.019) {
         return double_return(disarm_temp(my $undef));
     }
+    return double_return(disarm_temp(my $undef));
 }
 
 # Some naughty people were relying on these internal methods.

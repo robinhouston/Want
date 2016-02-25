@@ -160,3 +160,8 @@ Revision history for Perl extension Want.
     > rreturn() and lnoreturn() should be implemented using custom ops???
 
     > Dave M.
+
+0.28  Thu 25 Feb 2016 22:02:42 GMT
+    - Fix test failure in 5.14
+    - Fix test failure in 5.23.9 (using a patch from Slaven Rezic)
+      http://cpan.cpantesters.org/authors/id/S/SR/SREZIC/patches/Want-0.26-RT112226.patch
