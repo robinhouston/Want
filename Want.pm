@@ -12,7 +12,7 @@ our @ISA = qw(Exporter DynaLoader);
 
 our @EXPORT = qw(want rreturn lnoreturn);
 our @EXPORT_OK = qw(howmany wantref);
-our $VERSION = '0.26';
+our $VERSION = '0.27';
 
 bootstrap Want $VERSION;
 
@@ -172,29 +172,27 @@ sub rreturn (@) {
     if (want_lvalue(1)) {
         croak "Can't rreturn in lvalue context";
     }
-    double_return();
 
     # Extra scope needed to work with perl-5.19.7 or greater.
     # Prevents the return being optimised out, which is needed
     # since it's actually going to be used a stack level above
     # this sub.
     {
-        return wantarray ? @_ : $_[$#_];
+        return double_return(@_);
     }
 }
 
-sub lnoreturn () {
+sub lnoreturn () : lvalue {
     if (!want_lvalue(1) || !want_assign(1)) {
         croak "Can't lnoreturn except in ASSIGN context";
     }
-    double_return();
 
     # Extra scope needed to work with perl-5.19.7 or greater.
     # Prevents the return being optimised out, which is needed
     # since it's actually going to be used a stack level above
     # this sub.
     {
-        return disarm_temp(my $undef);
+        return double_return(disarm_temp(my $undef));
     }
 }
 

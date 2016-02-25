@@ -714,7 +714,7 @@ U32 uplevel;
     PUSHs(r ? sv_2mortal(newRV_noinc((SV*) r)) : &PL_sv_undef);
 
 void
-double_return()
+double_return(...)
   PREINIT:
     PERL_CONTEXT *ourcx, *cx;
   PPCODE:
@@ -722,12 +722,28 @@ double_return()
     cx    = upcontext(aTHX_ 1);
     if (!cx)
         Perl_croak(aTHX_ "Can't return outside a subroutine");
-
+#ifdef POPBLOCK
     ourcx->cx_type = CXt_NULL;
     CvDEPTH(ourcx->blk_sub.cv)--;
-#if HAS_RETSTACK
+#  if HAS_RETSTACK
     if (PL_retstack_ix > 0)
         --PL_retstack_ix;
+#  endif
+#else
+    /* In 5.23.8 or later, PL_curpad is saved in the context stack and
+     * restored by cx_popsub(), rather than being saved on the savestack
+     * and restored by LEAVE; so just CXt_NULLing the parent sub
+     * skips the PL_curpad restore and so everything done during the
+     * second part of the return will have the wrong PL_curpad.
+     * So instead, fix up the first return so that it thinks the
+     * op to continue at is iteself, forcing it to do a double return.
+     */
+    assert(PL_op->op_next->op_type == OP_RETURN);
+    /* force the op following the 'return' to be 'return' again */
+    ourcx->blk_sub.retop = PL_op->op_next;
+    assert(PL_markstack + ourcx->blk_oldmarksp + 1 == PL_markstack_ptr);
+    ourcx->blk_oldmarksp++;
+    ourcx->blk_gimme = cx->blk_gimme;
 #endif
 
     return;

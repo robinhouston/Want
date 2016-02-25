@@ -1,4 +1,4 @@
-BEGIN { $| = 1; print "1..70\n"; }
+BEGIN { $| = 1; print "1..72\n"; }
 
 # Test that we can load the module
 END {print "not ok 1\n" unless $loaded;}
@@ -223,3 +223,20 @@ my %x = tCOUNT(67, undef);
 
 %x    = (a => 1, tCOUNT(69, undef));
 %::x  = (a => 2, tCOUNT(70, undef));
+
+sub try_rreturn : lvalue {
+    rreturn @_;
+    return;
+}
+
+{
+    my $res;
+
+    $res = try_rreturn(qw(a b c));
+    print "not " unless $res eq "c";
+    print "ok 71 # rreturn in scalar context ($res)\n";
+
+    $res = join(':', try_rreturn(qw(a b c)));
+    print "not " unless $res eq "a:b:c";
+    print "ok 72 # rreturn in list context ($res)\n";
+}

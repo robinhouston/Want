@@ -142,3 +142,21 @@ Revision history for Perl extension Want.
         C<op_sibling> directly. ”
      
       Thanks to Reini Urban for the patch.
+
+0.27  Thu 25 Feb 2016 21:26:04 GMT
+    - perl 5.23.8 breaks the hack we were using to implement double_return.
+
+    This patch from David Mitchell fixes it. See https://rt.cpan.org/Ticket/Display.html?id=112226
+
+    David wrote:
+
+    > Running with a debugging perl-5.23.8 will show assertion failures in the Want test suite. It's because PL_comppad/PL_curpad save/restore is now done by the context stack / cx_popsub() rather than as previously on the savestack / LEAVE.
+
+    > This stops the double_return() 'convert CXt_SUB to CXt_NULL' hack from working properly, as PL_comppad is no longer restored when transitioning from the inner to outer sub. The attached patch substitutes one evil hack for another: it keeps the CXt_SUB context stack entry, but sets its retop field to point to the return op again (rather than its caller) so that the return op gets called twice (with a bit of markstack hackery to ensure there are two marks for the two returns to pop).
+
+    > rreturn and lnoreturn are also a bit under-tested. In particular, there are no tests for rreturn in list context. I added such a test, but more need adding.
+
+    > I can see this hack breaking again in the future. Perhaps in the long term
+    > rreturn() and lnoreturn() should be implemented using custom ops???
+
+    > Dave M.
