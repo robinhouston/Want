@@ -92,7 +92,7 @@ upcontext(pTHX_ I32 count)
         cxix = dopoptosub_at(aTHX_ ccstack, cxix - 1);
     }
     cx = &ccstack[cxix];
-    if (CxTYPE(cx) == CXt_SUB || CxTYPE(cx) == CXt_FORMAT) {
+    if (CxTYPE(cx) == CXt_SUB || CxTYPE(cx) == CXt_FORMAT /* || CxTYPE(cx) == CXt_EVAL */) {
         dbcxix = dopoptosub_at(aTHX_ ccstack, cxix - 1);
         /* We expect that ccstack[dbcxix] is CXt_SUB, anyway, the
            field below is defined for any cx. */
@@ -149,7 +149,7 @@ upcontext_plus(pTHX_ I32 count, bool end_of_block)
         cxix = dopoptosub_at(aTHX_ ccstack, cxix - 1);
     }
     cx = &ccstack[cxix];
-    if (CxTYPE(cx) == CXt_SUB || CxTYPE(cx) == CXt_FORMAT) {
+    if (CxTYPE(cx) == CXt_SUB || CxTYPE(cx) == CXt_FORMAT /* || CxTYPE(cx) == CXt_EVAL */) {
         dbcxix = dopoptosub_at(aTHX_ ccstack, cxix - 1);
         /* We expect that ccstack[dbcxix] is CXt_SUB, anyway, the
            field below is defined for any cx. */
@@ -188,6 +188,7 @@ upcontext_plus(pTHX_ I32 count, bool end_of_block)
             return tcx;
         case CXt_SUB:
         case CXt_FORMAT:
+        case CXt_EVAL:
             return cx;
         }
     }
